@@ -1,0 +1,61 @@
+version: 2
+
+sources:
+  - name: wwi_sources
+    database: wwi_db
+    schema: raw
+    tags: ['']
+    description: >
+      Data extracted from human resources systems to be transformed and delivered to the team.
+    meta:
+      contains_pii: true
+      source_owner: World Wide Importers
+      source_contact_emai: owner@wwi.com
+    tables:
+      - name: raw_cities
+        description: >
+          text
+
+      - name: raw_customers
+        description: >
+          text
+
+      - name: raw_employees
+        description: >
+          text
+
+      - name: raw_movements
+        description: >
+          text
+
+      - name: raw_orders
+        description: >
+          text
+
+      - name: raw_payment_method
+        description: >
+          text
+
+      - name: raw_purchase
+        description: >
+          text
+
+      - name: raw_sales
+        description: >
+          text
+
+      - name: raw_stock_holding
+        description: >
+          text
+
+      - name: raw_stock_item
+        description: >
+          text
+
+      - name: raw_transaction_type
+        description: >
+          text
+
+      - name: raw_transactions
+        description: >
+          text

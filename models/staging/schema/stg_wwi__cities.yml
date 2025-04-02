@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: stg_wwi__cities
+    description: >
+      test
+    config:
+      meta:
+        table_owner: Rafaela Muller
+        team: Human Resources
+        department:
+        model_maturity: high
+        access_type: restricted
+    columns:
+      - name: city_pk
+        description: >
+          test
+        data_tests:
+          - not_null
+          - unique
+
+      - name: city_name
+        description: >
+          test
+        data_tests:
+          - not_null
+
+      - name: state_province_name
+        description: >
+          test
+
+      - name: county_name
+        description: >
+          test
+
+      - name: continent_name
+        description: >
+          test
+
+      - name: sales_territory_name
+        description: >
+          test
+
+      - name: region_name
+        description: >
+          test
+
+      - name: subregion_name
+        description: >
+          test
+
+      - name: lastest_recorded_population_number
+        description: >
+          test
+
+      - name: valid_from
+        description: >
+          test
+
+      - name: valid_to
+        description: >
+          test
+
+      - name: extraction_date
+        description: >
+          test

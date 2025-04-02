@@ -1,0 +1,24 @@
+name: CI_job
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
+  PROD_USER_NAME: ${{ secrets.PROD_USER_NAME  }}
+  PROD_PASSWORD: ${{ secrets.PROD_PASSWORD  }}
+  PROD_DB_NAME: ${{ secrets.PROD_DB_NAME  }}
+  PROD_SCHEMA: ${{ secrets.PROD_SCHEMA  }}
+  CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
+  CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
+  CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
+  CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
+  CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:

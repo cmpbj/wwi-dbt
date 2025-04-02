@@ -1,0 +1,36 @@
+dbt_wwi:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DEV_HOSTNAME') }}"
+      user: "{{ env_var('DEV_USER_NAME') }}"
+      password: "{{ env_var('DEV_PASSWORD') }}"
+      port: 5432
+      dbname: "{{ env_var('DEV_DB_NAME') }}"
+      schema: "{{ env_var('DEV_SCHEMA') }}"
+      threads: 5
+      keepalives_idle: 0 # default 0, indicating the system default. See below
+      connect_timeout: 20 # default 10 seconds
+    prod:
+      type: postgres
+      host: "{{ env_var('PROD_HOSTNAME') }}"
+      user: "{{ env_var('PROD_USER_NAME') }}"
+      password: "{{ env_var('PROD_PASSWORD') }}"
+      port: 5432
+      dbname: "{{ env_var('PROD_DB_NAME') }}"
+      schema: "{{ env_var('PROD_SCHEMA') }}"
+      threads: 5
+      keepalives_idle: 0 # default 0, indicating the system default. See below
+      connect_timeout: 20 # default 10 seconds
+    ci:
+      type: postgres
+      host: "{{ env_var('CI_HOSTNAME') }}"
+      user: "{{ env_var('CI_USER_NAME') }}"
+      password: "{{ env_var('CI_PASSWORD') }}"
+      port: 5432
+      dbname: "{{ env_var('CI_DB_NAME') }}"
+      schema: "{{ env_var('CI_SCHEMA') }}"
+      threads: 5
+      keepalives_idle: 0 # default 0, indicating the system default. See below
+      connect_timeout: 20 # default 10 seconds
