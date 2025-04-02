@@ -18,7 +18,149 @@ env:
   CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
 
 jobs:
-  CI:
+  linting:
+    name: Linting
+    if: github.event_name == 'pull_request' && github.base_ref == 'main_core'
     runs-on: ubuntu-latest
+    container: python:${{ env.PYTHON_VERSION }}
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main_core branch history
+        run: git fetch origin main_core:refs/remotes/origin/main_core
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt dependencies
+        run: dbt deps
+
+      - name: Debug dbt connection
+        run: dbt debug
+
+      - name: Parse dbt project
+        run: dbt parse
+
+      - name: Run Pre-commit checks
+        run: pre-commit run --from-ref origin/main_core --to-ref HEAD --all-files
+
+  build:
+    name: Build dbt Models
+    if: github.event_name == 'pull_request' && github.base_ref == 'main_core'
+    runs-on: ubuntu-latest
+    container: python:${{ env.PYTHON_VERSION }}
+    needs: linting
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set dynamic environment variables
+        id: vars
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          CLEANED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's;/;_;g' | sed 's/-/_/g')
+          echo "CLEANED_BRANCH=${CLEANED_BRANCH_NAME}" >> $GITHUB_ENV
+          SCHEMA_NAME="dbt_ci_${CLEANED_BRANCH_NAME}_${{ github.run_id }}"
+          echo "CI_SCHEMA_NAME=${SCHEMA_NAME}" >> $GITHUB_ENV
+          echo "Using schema name: $SCHEMA_NAME"
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt dependencies
+        run: dbt deps
+
+      - name: Debug dbt connection
+        run: dbt debug
+
+      - name: Parse dbt project
+        run: dbt parse
+
+      - name: Try to checkout manifest.json from main_core
+        run: |
+          git fetch origin main_core
+          mkdir -p target-defer
+          git checkout origin/main_core -- target-defer/manifest.json || echo "manifest.json not found on main_core, proceeding without deferral."
+
+      - name: Build dbt models
+        run: |
+          if [[ "${{ github.head_ref }}" == *"FULL-REFRESH"* ]]; then
+            export FULL_REFRESH="--full-refresh"
+            echo "Using full-refresh"
+          else
+            export FULL_REFRESH=""
+            echo "Not using full-refresh"
+          fi
+          if [ -f "target-defer/manifest.json" ]; then
+            echo "Manifest found, attempting state-based clone and build..."
+            dbt clone -s state:modified+,config.materialized:incremental,state:old --exclude tag:pii --state target-defer
+            dbt clone -s state:modified+,config.materialized:snapshot,state:old --exclude tag:pii --state target-defer
+            dbt build -s state:modified state:modified+ --state target-defer --defer --fail-fast $FULL_REFRESH
+          else
+            echo "Manifest not found, running standard build..."
+            dbt build --fail-fast $FULL_REFRESH
+          fi
+
+      - name: Drop CI Schema
+        run: |
+          echo "Attempting to drop schema: ${{ env.CI_SCHEMA_NAME }}"
+          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA_NAME"'}'
+
+  upload_manifest:
+    name: Upload Manifest
+    if: github.ref == 'refs/heads/main_core' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    container: python:${{ env.PYTHON_VERSION }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MANIFEST_TOKEN }}
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt dependencies
+        run: dbt deps
+
+      - name: Parse dbt project for Production
+        run: dbt parse --target prod
+        env:
+          DBT_PROFILES_DIR: ./
+
+      - name: Prepare Manifest File
+        run: |
+          mkdir -p target-defer
+          if [ -f target/manifest.json ]; then
+            mv target/manifest.json target-defer/manifest.json
+            echo "Manifest prepared in target-defer/"
+          else
+            echo "manifest.json not found after dbt parse. Cannot proceed with upload."
+            exit 1
+          fi
+
+      - name: Upload manifest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest-artifact
+          path: target-defer/manifest.json
+
+      - name: Commit and Push Manifest
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions CI"
+          git checkout main_core
+          git pull origin main_core
+          git add target-defer/manifest.json
+          if git diff --staged --quiet; then
+            echo "No changes to manifest.json to commit."
+          else
+            git commit -m "chore: Upload manifest.json from CI [skip ci]"
+            echo "Pushing updated manifest.json to main_core..."
+            git push origin main_core
