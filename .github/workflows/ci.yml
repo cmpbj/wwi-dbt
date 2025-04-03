@@ -134,8 +134,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Ensures full history is available
-      - name: Debug Git Remote
-        run: git remote -v
 
       - name: Configure Git Authentication
         run: |
@@ -148,6 +146,9 @@ jobs:
           git fetch --all
           git checkout main
           git pull origin main
+
+      - name: Debug Git Remote
+        run: git remote -v
 
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
