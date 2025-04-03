@@ -55,6 +55,7 @@ jobs:
           CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
           CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
           CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+          DBT_DEFAULT_TARGET: ci
 
   build:
     name: Build dbt Models
@@ -107,17 +108,18 @@ jobs:
             dbt build --fail-fast $FULL_REFRESH
           fi
 
+      - name: Drop CI Schema
+        run: |
+          echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
+          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA"'}'
+
         env:
           CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
           CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
           CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
           CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
           CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
-
-      - name: Drop CI Schema
-        run: |
-          echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
-          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA"'}'
+          DBT_DEFAULT_TARGET: ci
 
   upload_manifest:
     name: Upload Manifest
