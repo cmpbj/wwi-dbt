@@ -17,6 +17,7 @@ env:
   CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
   CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
   PYTHON_VERSION: "3.9"
+  DBT_DEFAULT_TARGET: ci
 
 jobs:
   linting:
@@ -65,7 +66,7 @@ jobs:
           CLEANED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's;/;_;g' | sed 's/-/_/g')
           echo "CLEANED_BRANCH=${CLEANED_BRANCH_NAME}" >> $GITHUB_ENV
           SCHEMA_NAME="dbt_ci_${CLEANED_BRANCH_NAME}_${{ github.run_id }}"
-          echo "CI_SCHEMA_NAME=${SCHEMA_NAME}" >> $GITHUB_ENV
+          echo "CI_SCHEMA=${SCHEMA_NAME}" >> $GITHUB_ENV
           echo "Using schema name: $SCHEMA_NAME"
 
       - name: Install Python Dependencies
@@ -107,8 +108,8 @@ jobs:
 
       - name: Drop CI Schema
         run: |
-          echo "Attempting to drop schema: ${{ env.CI_SCHEMA_NAME }}"
-          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA_NAME"'}'
+          echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
+          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA"'}'
 
   upload_manifest:
     name: Upload Manifest
