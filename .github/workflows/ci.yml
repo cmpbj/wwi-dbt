@@ -49,6 +49,13 @@ jobs:
       - name: Run Pre-commit checks
         run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files
 
+        env:
+          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
+          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
+          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
+          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
+          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+
   build:
     name: Build dbt Models
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
@@ -81,12 +88,6 @@ jobs:
       - name: Parse dbt project
         run: dbt parse
 
-      - name: Try to checkout manifest.json from main
-        run: |
-          git fetch origin main
-          mkdir -p target-defer
-          git checkout origin/main -- target-defer/manifest.json || echo "manifest.json not found on main, proceeding without deferral."
-
       - name: Build dbt models
         run: |
           if [[ "${{ github.head_ref }}" == *"FULL-REFRESH"* ]]; then
@@ -105,6 +106,13 @@ jobs:
             echo "Manifest not found, running standard build..."
             dbt build --fail-fast $FULL_REFRESH
           fi
+
+        env:
+          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
+          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
+          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
+          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
+          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
 
       - name: Drop CI Schema
         run: |
@@ -163,3 +171,10 @@ jobs:
             git commit -m "chore: Upload manifest.json from CI [skip ci]"
             echo "Pushing updated manifest.json to main..."
             git push origin main
+
+        env:
+          PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
+          PROD_USER_NAME: ${{ secrets.PROD_USER_NAME  }}
+          PROD_PASSWORD: ${{ secrets.PROD_PASSWORD  }}
+          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME  }}
+          PROD_SCHEMA: ${{ secrets.PROD_SCHEMA  }}
