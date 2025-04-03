@@ -134,6 +134,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Ensures full history is available
+      - name: Debug Git Remote
+        run: git remote -v
 
       - name: Configure Git Authentication
         run: |
