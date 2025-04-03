@@ -1,1 +1,4 @@
 dbt-postgres
+sqlfluff==3.0.7
+sqlfluff-templater-dbt==3.0.7
+pre-commit==2.20.0
