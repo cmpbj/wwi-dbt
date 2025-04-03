@@ -13,7 +13,7 @@ with
             , coalesce(cast("continent" as varchar), 'Not Provided') as continent_name
             , cast("salesTerritory" as varchar) as sales_territory_name
             , cast("region" as varchar) as region_name
-            , cast("subregion" as varchar) as subregion_name
+            , cast("subregion" as varchar) as sub_region_name
             , cast("latestRecordedPopulation" as int) as lastest_recorded_population_number
             , cast("validFrom" as timestamp) as valid_from
             , cast("validTo" as timestamp) as valid_to

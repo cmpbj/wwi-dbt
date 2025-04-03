@@ -16,13 +16,14 @@ env:
   CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
   CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
   CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+  PYTHON_VERSION: "3.9"
+  DBT_DEFAULT_TARGET: ci
 
 jobs:
   linting:
     name: Linting
-    if: github.event_name == 'pull_request' && github.base_ref == 'main_core'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
-    container: python:${{ env.PYTHON_VERSION }}
 
     steps:
       - name: Checkout Code
@@ -30,8 +31,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch main_core branch history
-        run: git fetch origin main_core:refs/remotes/origin/main_core
+      - name: Fetch main branch history
+        run: git fetch origin main:refs/remotes/origin/main
 
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
@@ -46,13 +47,20 @@ jobs:
         run: dbt parse
 
       - name: Run Pre-commit checks
-        run: pre-commit run --from-ref origin/main_core --to-ref HEAD --all-files
+        run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files
+
+        env:
+          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
+          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
+          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
+          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
+          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+          DBT_DEFAULT_TARGET: ci
 
   build:
     name: Build dbt Models
-    if: github.event_name == 'pull_request' && github.base_ref == 'main_core'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
-    container: python:${{ env.PYTHON_VERSION }}
     needs: linting
 
     steps:
@@ -66,7 +74,7 @@ jobs:
           CLEANED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's;/;_;g' | sed 's/-/_/g')
           echo "CLEANED_BRANCH=${CLEANED_BRANCH_NAME}" >> $GITHUB_ENV
           SCHEMA_NAME="dbt_ci_${CLEANED_BRANCH_NAME}_${{ github.run_id }}"
-          echo "CI_SCHEMA_NAME=${SCHEMA_NAME}" >> $GITHUB_ENV
+          echo "CI_SCHEMA=${SCHEMA_NAME}" >> $GITHUB_ENV
           echo "Using schema name: $SCHEMA_NAME"
 
       - name: Install Python Dependencies
@@ -80,12 +88,6 @@ jobs:
 
       - name: Parse dbt project
         run: dbt parse
-
-      - name: Try to checkout manifest.json from main_core
-        run: |
-          git fetch origin main_core
-          mkdir -p target-defer
-          git checkout origin/main_core -- target-defer/manifest.json || echo "manifest.json not found on main_core, proceeding without deferral."
 
       - name: Build dbt models
         run: |
@@ -108,14 +110,21 @@ jobs:
 
       - name: Drop CI Schema
         run: |
-          echo "Attempting to drop schema: ${{ env.CI_SCHEMA_NAME }}"
-          dbt run-operation drop_schemas_dev --args '{schema_name: '"$CI_SCHEMA_NAME"'}'
+          echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
+          dbt run-operation drop_schemas_dev --args '{pattern: '"$CI_SCHEMA"'}'
+
+        env:
+          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
+          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
+          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
+          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
+          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
+          DBT_DEFAULT_TARGET: ci
 
   upload_manifest:
     name: Upload Manifest
-    if: github.ref == 'refs/heads/main_core' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
-    container: python:${{ env.PYTHON_VERSION }}
 
     steps:
       - name: Checkout Code
@@ -155,12 +164,19 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions CI"
-          git checkout main_core
-          git pull origin main_core
+          git checkout main
+          git pull origin main
           git add target-defer/manifest.json
           if git diff --staged --quiet; then
             echo "No changes to manifest.json to commit."
           else
             git commit -m "chore: Upload manifest.json from CI [skip ci]"
-            echo "Pushing updated manifest.json to main_core..."
-            git push origin main_core
+            echo "Pushing updated manifest.json to main..."
+            git push origin main
+
+        env:
+          PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
+          PROD_USER_NAME: ${{ secrets.PROD_USER_NAME  }}
+          PROD_PASSWORD: ${{ secrets.PROD_PASSWORD  }}
+          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME  }}
+          PROD_SCHEMA: ${{ secrets.PROD_SCHEMA  }}

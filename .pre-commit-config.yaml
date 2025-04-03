@@ -1,0 +1,46 @@
+files: ^models/
+
+repos:
+  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+    rev: v2.0.5
+    hooks:
+    - id: dbt-docs-generate
+      args: ["--cmd-flags", "++empty-catalog", "++no-compile"]
+    - id: check-model-columns-have-desc
+      name: Ensure models have descriptions in all its columns.
+    - id: check-model-has-description
+      name: Ensure every model has a description in its yaml file.
+      exclude: ^models/monitoring/stagings/
+    - id: check-source-table-has-description
+      name: Ensure every source has a description on the yaml file.
+    - id: check-model-has-tests-by-name
+      name: Ensure every model has at least one not_null test
+      args: ["--tests", "not_null=1", "--"]
+      exclude: ^models/monitoring/stagings/
+    - id: check-model-has-tests
+      name: Ensure every model has at least 2 data-tests configured
+      args: ["--test-cnt", "2", "--"]
+      exclude: ^models/monitoring/stagings/
+    - id: check-script-ref-and-source
+      name: Ensure every model uses ref and source macros
+      args: ["--manifest", "target/manifest.json"]
+
+
+  # - repo: https://github.com/sqlfluff/sqlfluff
+  #   rev: 3.0.7
+  #   hooks:
+  #   - id: sqlfluff-lint
+  #     language: python
+  #     # Need these two dependencies.
+  #     # sqlfluff-templater-dbt should match the version of sqlfluff above in rev (pip show sqlfluff-templater-dbt)
+  #     # dbt-snowflake needs to match the version in requirements.txt.
+  #     additional_dependencies:
+  #       ["sqlfluff-templater-dbt==3.0.7", "dbt-databricks"]
+  #     args:
+  #       [--config, .sqlfluff]
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-c=.yamllint]
