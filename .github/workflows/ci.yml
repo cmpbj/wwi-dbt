@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 env:
   PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
@@ -130,7 +133,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MANIFEST_TOKEN }}
+          fetch-depth: 0  # Ensures full history is available
+
+      - name: Configure Git Authentication
+        run: |
+          git remote set-url origin "https://${{ secrets.CI_USER }}:${{ secrets.CI_PASSWORD }}@github.com/${{ github.repository }}.git"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions CI"
+          git fetch --all
+          git checkout main  # Change this if you need to use a different branch
+          git pull origin main
 
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
@@ -154,24 +166,13 @@ jobs:
             exit 1
           fi
 
-      - name: Upload manifest artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: manifest-artifact
-          path: target-defer/manifest.json
-
       - name: Commit and Push Manifest
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions CI"
-          git checkout main
-          git pull origin main
           git add target-defer/manifest.json
           if git diff --staged --quiet; then
             echo "No changes to manifest.json to commit."
           else
-            git commit -m "chore: Upload manifest.json from CI [skip ci]"
-            echo "Pushing updated manifest.json to main..."
+            git commit -m "[skip ci] Upload manifest.json to branch main"
             git push origin main
 
         env:
