@@ -137,7 +137,7 @@ jobs:
 
       - name: Configure Git Authentication
         run: |
-          git remote set-url origin "https://${{ secrets.CI_USER }}:${{ secrets.CI_PASSWORD }}@github.com/${{ github.repository }}.git"
+          git remote set-url origin "https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions CI"
           git fetch --all
