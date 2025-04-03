@@ -139,9 +139,12 @@ jobs:
         run: |
           git remote set-url origin "https://$GH_PAT@github.com/${{ github.repository }}.git"
           git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions CI"
           git remote update
           git fetch --all
           git checkout main
+          git pull origin main
 
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
