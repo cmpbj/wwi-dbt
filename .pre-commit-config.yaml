@@ -4,6 +4,8 @@ repos:
   - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
     rev: v2.0.5
     hooks:
+    - id: dbt-deps
+    - id: dbt-parse
     - id: dbt-docs-generate
       args: ["--cmd-flags", "++empty-catalog", "++no-compile"]
     - id: check-model-columns-have-desc
