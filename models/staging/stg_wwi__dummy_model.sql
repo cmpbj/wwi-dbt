@@ -1,1 +1,2 @@
-select * from raw.raw_cities
+select cityKey
+from public.raw.raw_cities

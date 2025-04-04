@@ -12,7 +12,7 @@ models:
         model_maturity: high
         access_type: restricted
     columns:
-      - name: col
+      - name: cityKey
         description: >
           test
         data_tests:
