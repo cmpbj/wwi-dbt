@@ -134,10 +134,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Ensures full history is available
+          token: ${{ secrets.GH_PAT }}
 
       - name: Configure Git Authentication
         run: |
-          git config --global user.email "wwi@owner.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions CI"
           git remote remove origin || true
           git remote add origin "https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
@@ -172,15 +173,21 @@ jobs:
             exit 1
           fi
 
-      - name: Commit and Push Manifest
+      - name: Commit Manifest
         run: |
           git add target-defer/manifest.json
           if git diff --staged --quiet; then
             echo "No changes to manifest.json to commit."
           else
             git commit -m "[skip ci] Upload manifest.json to branch main"
-            git push origin main
           fi
+
+      - name: Push Manifest
+        uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GH_PAT }}
+            repository: ${{ github.repository }}
+            force: true
 
         env:
           PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
