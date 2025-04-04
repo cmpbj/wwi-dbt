@@ -25,6 +25,7 @@ repos:
       exclude: ^models/monitoring/stagings/
     - id: check-script-ref-and-source
       name: Ensure every model uses ref and source macros
+      args: ["--manifest", "target/manifest.json"]
 
   # - repo: https://github.com/sqlfluff/sqlfluff
   #   rev: 3.0.7
