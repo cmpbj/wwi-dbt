@@ -75,9 +75,12 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.head_ref }}"
           CLEANED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's;/;_;g' | sed 's/-/_/g')
-          echo "CLEANED_BRANCH=${CLEANED_BRANCH_NAME}" >> $CI_SCHEMA
           SCHEMA_NAME="dbt_ci_${CLEANED_BRANCH_NAME}_${{ github.run_id }}"
-          echo "CI_SCHEMA=${SCHEMA_NAME}" >> $CI_SCHEMA
+          export CI_SCHEMA=$SCHEMA_NAME  # Explicitly export it
+
+          echo "CLEANED_BRANCH=${CLEANED_BRANCH_NAME}" >> $GITHUB_ENV
+          echo "CI_SCHEMA=${SCHEMA_NAME}" >> $GITHUB_ENV
+
           echo "Using schema name: $SCHEMA_NAME"
 
       - name: Install Python Dependencies
