@@ -12,17 +12,14 @@ repos:
       name: Ensure models have descriptions in all its columns.
     - id: check-model-has-description
       name: Ensure every model has a description in its yaml file.
-      exclude: ^models/monitoring/stagings/
     - id: check-source-table-has-description
       name: Ensure every source has a description on the yaml file.
     - id: check-model-has-tests-by-name
       name: Ensure every model has at least one not_null test
       args: ["--tests", "not_null=1", "--"]
-      exclude: ^models/monitoring/stagings/
     - id: check-model-has-tests
       name: Ensure every model has at least 2 data-tests configured
       args: ["--test-cnt", "2", "--"]
-      exclude: ^models/monitoring/stagings/
     - id: check-script-ref-and-source
       name: Ensure every model uses ref and source macros
       args: ["--manifest", "target/manifest.json"]

@@ -1,2 +1,1 @@
-select "cityKey"
-from raw.raw_cities
+select * {{ ref('stg_wwi__employees') }}
