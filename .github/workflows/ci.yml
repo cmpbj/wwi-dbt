@@ -140,10 +140,8 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions CI"
-          git remote remove origin || true
-          git remote add origin "https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
-          git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-          git remote update
+          git remote set-url origin "https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
+          git fetch --unshallow
           git fetch --all
           git checkout main
           git pull origin main
