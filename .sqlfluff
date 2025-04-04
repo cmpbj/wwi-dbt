@@ -1,0 +1,52 @@
+[sqlfluff]
+dialect = postgres
+
+# One of [raw|jinja|python|placeholder]
+templater = dbt
+
+# Comma separated list of rules to check, default to all
+rules = all
+# Comma separated list of rules to exclude, or None
+exclude_rules = L034
+
+max_line_length = 150
+
+[sqlfluff:templater:dbt]
+project_dir = ./
+profiles_dir = ./
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+indented_joins = False
+indented_ctes = True
+indented_using_on = True
+indented_on_contents = False
+indented_then = True
+indented_then_contents = True
+allow_implicit_indents = False
+template_blocks_indent = False
+# This is a comma separated list of elements to skip
+# indentation edits to.
+skip_indentation_in = script_content
+# If comments are found at the end of long lines, we default to moving
+# them to the line _before_ their current location as the convention is
+# that a comment precedes the line it describes. However if you prefer
+# comments moved _after_, this configuration setting can be set to "after".
+trailing_comments = before
+# To exclude comment lines from indentation entirely set this to "True".
+ignore_comment_lines = False
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+# Layout configuration
+# See https://docs.sqlfluff.com/en/stable/layout.html#configuring-layout-and-spacing
+[sqlfluff:layout:type:comma] #LT04;L019
+spacing_before = touch
+line_position = leading
+
+[sqlfluff:rules:layout.long_lines] #LT05;L016
+# Line length
+ignore_comment_lines = False
+ignore_comment_clauses = False

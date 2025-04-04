@@ -1,0 +1,8 @@
+# Comments start with a hash.
+
+# Ignore anything in the "path"
+analyses/
+macros/
+dbt_packages/
+target/
+venv/
