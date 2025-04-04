@@ -16,7 +16,7 @@ with
             , cast("subregion" as varchar) as sub_region_name
             , cast("latestRecordedPopulation" as int) as lastest_recorded_population_number
             , cast("validFrom" as timestamp) as valid_from
-            , cast("validTo" as timestamp) as valid_to
+            -- , cast("validTo" as timestamp) as valid_to
             , cast("extraction_date" as timestamp) as extraction_date
         from source
         where cast("cityKey" as int) != 0
