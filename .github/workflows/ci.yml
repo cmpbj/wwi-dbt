@@ -141,7 +141,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions CI"
           git remote set-url origin "https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
-          git fetch --unshallow
           git fetch --all
           git checkout main
           git pull origin main
