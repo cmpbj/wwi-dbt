@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_wii__dumy_model
+  - name: stg_wwi__dummy_model
     description: >
       test
     config:
