@@ -184,10 +184,10 @@ jobs:
 
       - name: Push Manifest
         uses: ad-m/github-push-action@master
-          with:
-            github_token: ${{ secrets.GH_PAT }}
-            repository: ${{ github.repository }}
-            force: true
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          repository: ${{ github.repository }}
+          force: true
 
         env:
           PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
