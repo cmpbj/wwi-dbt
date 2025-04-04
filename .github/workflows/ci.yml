@@ -114,7 +114,7 @@ jobs:
       - name: Drop CI Schema
         run: |
           echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
-          dbt run-operation drop_schemas_dev --args '{pattern: '"$CI_SCHEMA"'}'
+          dbt run-operation drop_schemas_dev --args '{pattern: '"$CLEANED_BRANCH"'}'
 
         env:
           CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
