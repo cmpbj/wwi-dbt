@@ -1,2 +1,2 @@
 select cityKey
-from public.raw.raw_cities
+from raw.raw_cities
