@@ -7,7 +7,7 @@ models:
     config:
       meta:
         table_owner: Rafaela Muller
-        team: Human Resources
+        team: Operations
         department:
         model_maturity: high
         access_type: restricted
