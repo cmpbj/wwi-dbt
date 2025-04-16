@@ -1,17 +1,20 @@
-# dbt Project: Automating Validations with Pre-commit & Linters
+# dbt Project: WWI Data Transformations with Automated Validations
 
 ## Project Overview
 
-This repository demonstrates how to **automate validations** and ensure **code quality** in dbt projects. It uses data from the **World Wide Importers (WWI) dataset**, accessed via the public API (`https://demodata.grapecity.com/wwi/api/v1/`), as the basis for the dbt models.
+This repository contains a dbt project that builds a transformation pipeline over the World Wide Importers (WWI) dataset, accessed via the public API (https://demodata.grapecity.com/wwi/api/v1/).
 
-We use a combination of `pre-commit`, `dbt-checkpoint`, `yamllint`, and `SQLFluff` to enforce coding standards, documentation rules, naming conventions, and the presence of tests *before* the code is even pushed to the remote repository.
+The project includes automated validations to ensure code quality, consistency, and best practices during development and continuous integration. Tools like pre-commit, dbt-checkpoint, SQLFluff, and yamllint are integrated to catch issues early, enforce standards, and streamline the development workflow.
 
-The goal is to show how these tools can be integrated into the development workflow to:
+This setup helps to:
 
-1.  **Detect errors early:** Catch syntax, style, and logic issues during local development.
-2.  **Maintain consistency:** Ensure all contributors follow the same standards.
-3.  **Improve quality:** Enforce best practices like documentation, testing, and proper referencing.
-4.  **Automate reviews:** Reduce time spent on manual code reviews for common issues.
+1. **Detect errors early**: Catch syntax, style, and logic issues during local development.
+
+2. **Maintain consistency**: Ensure all contributors follow the same standards.
+
+3. **Improve quality**: Enforce best practices like documentation, testing, and proper referencing.
+
+4. **Automate reviews**: Reduce time spent on manual code reviews for common issues.
 
 ## Technologies Used
 
