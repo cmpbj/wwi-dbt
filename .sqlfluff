@@ -8,11 +8,6 @@ dialect = postgres
 # One of [raw|jinja|python|placeholder]
 templater = dbt
 
-# Specifies the root directory of your dbt project and the profiles.yml. './' means the current directory.
-[sqlfluff:templater:dbt]
-profiles_dir = ./
-project_dir = ./
-
 # Defines the set of rules to enable. 'all' enables all available rules by default.
 # Specific rules can be listed comma-separated (e.g., L001, L010).
 rules = all
@@ -27,6 +22,11 @@ output_line_length = 80
 
 # Sets the maximum allowed line length in characters. Lines exceeding this will trigger rule L016.
 max_line_length = 150
+
+# Specifies the root directory of your dbt project and the profiles.yml. './' means the current directory.
+[sqlfluff:templater:dbt]
+profiles_dir = ./
+project_dir = ./
 
 # Configures indentation rules, primarily affecting rule L003.
 [sqlfluff:indentation]
@@ -76,7 +76,6 @@ line_position = leading
 # Configures rules related to line length, primarily affecting rule L016.
 # User comment indicates relevance for LT05 (likely an alias/related rule) and L016.
 [sqlfluff:rules:layout.long_lines] #LT05;L016
-max_line_length = 150
 # Determines if lines containing *only* comments should be ignored when checking max_line_length (L016).
 ignore_comment_lines = True
 # Determines if lines containing only comments *within* certain clauses should be ignored when checking max_line_length (L016).
