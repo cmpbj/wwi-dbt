@@ -13,8 +13,7 @@ models:
         access_type: restricted
     columns:
       - name: city_pk
-        description: >
-          {test}
+        description: "{ test }"
         data_tests:
           - not_null
           - unique

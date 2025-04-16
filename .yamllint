@@ -1,6 +1,6 @@
 rules:
   # Check spacing inside braces {}
-  braces: disable
+  braces: enable
 
   # Check spacing inside brackets []
   brackets: enable
