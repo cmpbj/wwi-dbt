@@ -7,14 +7,14 @@ models:
     config:
       meta:
         table_owner: Rafaela Muller
-        team: Human Resources
+        team: Operations
         department:
         model_maturity: high
         access_type: restricted
     columns:
       - name: city_pk
         description: >
-          test
+         { test }
         data_tests:
           - not_null
           - unique

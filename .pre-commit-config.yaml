@@ -22,6 +22,12 @@ repos:
       args: ["--test-cnt", "2", "--"]
     - id: check-script-has-no-table-name
       name: Ensure every model uses ref and source macros
+    - id: check-model-parents-name-prefix
+      exclude: ^models/staging/
+      args: ["--whitelist", "stg_", "--"]
+    - id: check-model-name-contract
+      args: [--pattern, "(dim_|fct_).*"]
+      files: models/marts/
 
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.0.7
@@ -30,7 +36,6 @@ repos:
       language: python
       # Need these two dependencies.
       # sqlfluff-templater-dbt should match the version of sqlfluff above in rev (pip show sqlfluff-templater-dbt)
-      # dbt-snowflake needs to match the version in requirements.txt.
       additional_dependencies:
         ["sqlfluff-templater-dbt==3.0.7", "dbt-postgres"]
       args:

@@ -1,0 +1,96 @@
+version: 2
+
+models:
+  - name: stg_wwi__orders
+    description: >
+      test
+    config:
+      meta:
+        table_owner: Jonh Wick
+        team: Sales
+        department:
+        model_maturity: high
+        access_type: restricted
+    columns:
+      - name: order_pk
+        description: >
+          test
+        data_tests:
+          - unique
+          - not_null
+
+      - name: city_fk
+        description: >
+          test
+
+      - name: address_description
+        description: >
+          test
+
+      - name: customer_fk
+        description: >
+          test
+
+      - name: customer_name
+        description: >
+          test
+
+      - name: stock_item_fk
+        description: >
+          test
+
+      - name: stock_item_description
+        description: >
+          test
+
+      - name: order_date
+        description: >
+          test
+
+      - name: picked_date
+        description: >
+          test
+
+      - name: sales_person_fk
+        description: >
+          test
+
+      - name: picker_key_fk
+        description: >
+          test
+
+      - name: order_item_description
+        description: >
+          test
+
+      - name: package
+        description: >
+          test
+
+      - name: quantity
+        description: >
+          test
+
+      - name: unit_price
+        description: >
+          test
+
+      - name: tax_rate
+        description: >
+          test
+
+      - name: total_excluding_tax
+        description: >
+          test
+
+      - name: tax_amount
+        description: >
+          test
+
+      - name: total_including_tax
+        description: >
+          test
+
+      - name: extraction_date
+        description: >
+          test
