@@ -14,7 +14,7 @@ models:
     columns:
       - name: city_pk
         description: >
-          test
+          {test}
         data_tests:
           - not_null
           - unique

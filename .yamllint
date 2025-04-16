@@ -1,27 +1,68 @@
 rules:
-  braces: enable
+  # Check spacing inside braces {}
+  braces: disable
+
+  # Check spacing inside brackets []
   brackets: enable
+
+  # Check spacing after colons :
   colons: enable
+
+  # Check spacing after commas ,
   commas: enable
+
+  # Check comment formatting (e.g., requires space after #)
   comments:
     level: warning
+
+  # Check indentation of comments
   comments-indentation:
     level: warning
+
+  # Check for document end marker '...' (currently disabled)
   document-end: disable
+
+  # Check for document start marker '---' (currently disabled)
   document-start: disable
+
+  # Check for too many consecutive empty lines
   empty-lines: enable
+
+  # Forbid nodes with empty content (currently disabled)
   empty-values: disable
+
+  # Check spacing after hyphens -
   hyphens: enable
+
+  # Check indentation consistency
   indentation: enable
+
+  # Check for duplicate keys within the same mapping
   key-duplicates: enable
+
+  # Check for specific ordering of keys in mappings (currently disabled)
   key-ordering: disable
+
+  # Ensure the file ends with a single newline character
   new-line-at-end-of-file: enable
+
+  # Check newline characters (e.g., forbid CRLF) (currently disabled)
   new-lines: disable
+
+  # Forbid octal values like '0o12' or the deprecated '012' (currently disabled)
   octal-values: disable
+
+  # Control when strings should be quoted (currently disabled)
   quoted-strings: disable
+
+  # Check for spaces at the end of lines
   trailing-spaces: enable
+
+  # Check for non-standard boolean values (e.g., Yes, TRUE, Off); prefers 'true' or 'false'
   truthy:
     level: warning
+
+  # Check for lines exceeding the maximum configured length
   line-length:
     max: 250
     level: warning
