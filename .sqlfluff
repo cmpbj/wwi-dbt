@@ -1,52 +1,103 @@
+# https://docs.sqlfluff.com/en/2.1.3/rules.html
+
 [sqlfluff]
+# Specifies the SQL dialect to use for parsing and linting (e.g., postgres, mysql, bigquery).
 dialect = postgres
 
+# Specifies the templater to use (e.g., dbt, jinja, python). 'dbt' integrates with dbt projects.
 # One of [raw|jinja|python|placeholder]
 templater = dbt
 
-# Comma separated list of rules to check, default to all
-rules = all
-# Comma separated list of rules to exclude, or None
-exclude_rules = L034
-
-max_line_length = 150
-
+# Specifies the root directory of your dbt project and the profiles.yml. './' means the current directory.
 [sqlfluff:templater:dbt]
 project_dir = ./
 profiles_dir = ./
 
+# Defines the set of rules to enable. 'all' enables all available rules by default.
+# Specific rules can be listed comma-separated (e.g., L001, L010).
+rules = all
+
+# Specifies rules to disable, overriding the 'rules' setting.
+# L034 (structure.column_order) enforces a specific order for select clause elements (wildcards first, then simple columns, then complex expressions).
+# Excluding it means this specific ordering is NOT enforced.
+exclude_rules = L034
+
+# Sets the maximum allowed line length in characters. Lines exceeding this will trigger rule L016.
+max_line_length = 150
+
+# Configures indentation rules, primarily affecting rule L003.
 [sqlfluff:indentation]
+# Defines the character used for indentation ('space' or 'tab').
 indent_unit = space
+# Sets the width of a tab character in spaces (relevant if indent_unit is 'tab' or for mixed indentation). Also commonly defines the space indent size.
 tab_space_size = 4
+# Determines if JOIN clauses should be indented relative to FROM ('False' usually aligns them).
 indented_joins = False
+# Determines if Common Table Expressions (CTEs) within a WITH clause should be indented.
 indented_ctes = True
+# Determines if USING/ON clauses should be indented relative to the JOIN keyword.
 indented_using_on = True
+# Determines if the *content* within a multi-line ON clause should be further indented relative to the ON keyword.
 indented_on_contents = False
+# Determines if the THEN keyword in a CASE statement should be indented relative to WHEN.
 indented_then = True
+# Determines if the expression *following* THEN (if on a new line) should be indented relative to THEN.
 indented_then_contents = True
+# Disallows implicit indents often found in templated code where indentation doesn't strictly follow SQL structure.
 allow_implicit_indents = False
+# Controls whether the content *within* templating blocks (e.g., {% if %}) should be indented according to SQLFluff rules.
 template_blocks_indent = False
-# This is a comma separated list of elements to skip
-# indentation edits to.
+
+# Tells the indentation linter (L003) to skip checking indentation within certain sections (e.g., script content like BEGIN...END).
 skip_indentation_in = script_content
-# If comments are found at the end of long lines, we default to moving
-# them to the line _before_ their current location as the convention is
-# that a comment precedes the line it describes. However if you prefer
-# comments moved _after_, this configuration setting can be set to "after".
+
+# Defines how trailing comments (at the end of a code line) affect the indentation of the *next* line. 'before' means it's associated with the line it's on.
 trailing_comments = before
-# To exclude comment lines from indentation entirely set this to "True".
+
+# Determines if lines containing *only* comments should be ignored by the indentation linter (L003).
 ignore_comment_lines = False
 
+# Configures keyword capitalization rules, primarily affecting rule L010.
 [sqlfluff:rules:capitalisation.keywords]
+# Sets the required capitalization for keywords ('lower', 'upper', 'capitalise', 'consistent').
 capitalisation_policy = lower
 
-# Layout configuration
-# See https://docs.sqlfluff.com/en/stable/layout.html#configuring-layout-and-spacing
+# Configures rules related to commas, primarily affecting rule L019 (Trailing/Leading Commas) and spacing around commas.
+# User comment indicates relevance for LT04 (likely spacing) and L019 (position).
 [sqlfluff:layout:type:comma] #LT04;L019
+# Defines spacing *before* a comma ('touch' means no space).
 spacing_before = touch
+# Defines comma position in multi-line lists ('leading' or 'trailing').
 line_position = leading
 
+# Configures rules related to line length, primarily affecting rule L016.
+# User comment indicates relevance for LT05 (likely an alias/related rule) and L016.
 [sqlfluff:rules:layout.long_lines] #LT05;L016
-# Line length
-ignore_comment_lines = False
+# Determines if lines containing *only* comments should be ignored when checking max_line_length (L016).
+ignore_comment_lines = True
+# Determines if lines containing only comments *within* certain clauses should be ignored when checking max_line_length (L016).
 ignore_comment_clauses = False
+
+# Rule AL01: Configuration for table aliasing
+[sqlfluff:rules:aliasing.table]
+# Set the required aliasing style for tables.
+# 'explicit' requires the 'AS' keyword.
+# 'implicit' requires omitting the 'AS' keyword.
+aliasing = explicit
+
+# Rule AL01: Configuration for table aliasing
+[sqlfluff:rules:aliasing.column]
+# Set the required aliasing style for tables.
+# 'explicit' requires the 'AS' keyword.
+# 'implicit' requires omitting the 'AS' keyword.
+aliasing = explicit
+
+# Rule L025: Configuration for consistent reference qualification
+[sqlfluff:rules:references.consistent]
+# Enforce consistent use of aliases when referencing columns.
+# If an alias is used for one column from a table, it must be used for all.
+enforce_consistency = True
+
+[sqlfluff:rules:aliasing.length]
+min_alias_length = 3
+max_alias_length = None
