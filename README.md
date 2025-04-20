@@ -18,7 +18,6 @@ This setup helps to:
 
 ## Technologies Used
 
-* **dbt (Data Build Tool):** The primary tool for transforming data in the data warehouse. This project demonstrates how to apply validations to dbt models (`.sql`) and configuration files (`.yml`).
 * **Pre-commit:** A framework for managing and maintaining Git pre-commit hooks. It automatically runs scripts/tools before each `git commit`, blocking the commit if any checks fail.
 * **dbt-checkpoint:** A collection of `pre-commit` hooks specifically designed for validating dbt projects. In this project, we use hooks to:
     * Verify that `dbt deps`, `dbt parse`, and `dbt docs generate` run without errors.
@@ -44,7 +43,7 @@ This setup helps to:
 
 1.  **Local Development:**
     * The developer makes changes to `.sql` or `.yml` files.
-    * When attempting to `git commit`, the `pre-commit` framework is triggered.
+    * When attempting to `git commit`, the `pre-commit` framework is triggered, if the developer had installed the pre-commit hooks'.
     * `pre-commit` sequentially executes the hooks defined in `.pre-commit-config.yaml`:
         * `yamllint` checks the modified `.yml` files.
         * `sqlfluff` checks the modified `.sql` files.
@@ -78,7 +77,5 @@ This setup helps to:
 2.  Ensure you have Python and `pip` installed.
 3.  Install the dependencies: `pip install -r requirements.txt`
 4.  Install the git hooks: `pre-commit install`
-5.  Configure your local `profiles.yml` file (usually in `~/.dbt/`) with your development environment credentials.
+5.  Configure your local `profiles.yml` file with your development environment credentials.
 6.  Now, whenever you try to commit (`git commit`), the hooks will run automatically! You can also run them manually at any time with `pre-commit run --all-files`.
-
-This project demonstrates a robust pipeline for maintaining quality and consistency in a dbt project, automating critical validations early in the development cycle and in CI.
