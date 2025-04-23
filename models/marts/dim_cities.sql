@@ -1,9 +1,7 @@
 with
 
     cities as (
-        select
-            *
-            , 1 as col
+        select *
         from {{ ref('stg_wwi__cities') }}
     )
 
