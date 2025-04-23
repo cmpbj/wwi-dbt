@@ -10,7 +10,7 @@ repos:
       args: ["--cmd-flags", "++no-partial-parse"]
     - id: check-model-has-all-columns
       name: Ensure all models has all columns in the properties file.
-      args: ["--catalog", "target/catalog.json"]
+      args: ["--catalog", "./target/catalog.json"]
     - id: check-model-columns-have-desc
       name: Ensure models have descriptions in all its columns.
     - id: check-model-has-description
