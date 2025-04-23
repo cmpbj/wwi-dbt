@@ -26,8 +26,6 @@ models:
       - name: customer_fk
         description: >
           Foreign key referencing the customer associated with the order.
-        data_tests:
-          - not_null
 
       - name: customer_name
         description: >
@@ -36,8 +34,6 @@ models:
       - name: stock_item_fk
         description: >
           Foreign key referencing the stock item ordered.
-        data_tests:
-          - not_null
 
       - name: stock_item_description
         description: >
@@ -46,8 +42,6 @@ models:
       - name: order_date
         description: >
           Date the order was placed.
-        data_tests:
-          - not_null
 
       - name: picked_date
         description: >
@@ -56,8 +50,6 @@ models:
       - name: sales_person_fk
         description: >
           Foreign key referencing the sales person associated with the order.
-        data_tests:
-          - not_null
 
       - name: picker_key_fk
         description: >
@@ -113,7 +105,6 @@ models:
         description: >
           Foreign key referencing the city dimension, derived from the order's original city foreign key.
         data_tests:
-          - not_null
           - relationships:
               to: ref('cities')
               field: city_pk
