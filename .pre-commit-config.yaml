@@ -43,6 +43,7 @@ repos:
     rev: 3.0.7
     hooks:
     - id: sqlfluff-lint
+      alias: pre-build
       language: python
       # Need these two dependencies.
       # sqlfluff-templater-dbt should match the version of sqlfluff above in rev (pip show sqlfluff-templater-dbt)
@@ -55,4 +56,5 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
+        alias: pre-build
         args: [-c=.yamllint]
