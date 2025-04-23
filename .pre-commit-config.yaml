@@ -7,7 +7,6 @@ repos:
     - id: dbt-deps
     - id: dbt-parse
     - id: dbt-docs-generate
-      args: ["--cmd-flags", "++no-compile"]
     - id: check-model-has-all-columns
       name: Ensure all models has all columns in the properties file.
     - id: check-model-columns-have-desc
