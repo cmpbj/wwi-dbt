@@ -47,7 +47,7 @@ jobs:
         run: dbt debug
 
       - name: Compile dbt models
-        run: dbt compile --select state:modified+ --full-refresh
+        run: dbt compile --select state:modified+ --state target-defer
 
       - name: Generate catalog.json
         run: dbt docs generate --profiles-dir . --no-partial-parse
