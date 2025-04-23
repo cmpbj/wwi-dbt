@@ -7,8 +7,8 @@ models:
     config:
       meta:
         table_owner: Jonh Wick
-        team: Sales
-        department:
+        team: Sales Ops
+        department: Sales
         model_maturity: high
         access_type: restricted
     columns:

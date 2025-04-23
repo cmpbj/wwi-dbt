@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: dim_cities
+    description: >
+      dimension for city data from the Wide World Importers source. Contains geographic and demographic information about cities.
+    config:
+      meta:
+        table_owner: Freddy Krueger
+        team: Data Team
+        department: Analytics
+        model_maturity: high
+        access_type: restricted
+    columns:
+      - name: city_pk
+        description: >
+          Unique surrogate key for the city.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: city_name
+        description: >
+          Name of the city.
+
+      - name: state_province_name
+        description: >
+          Name of the state or province where the city is located.
+
+      - name: county_name
+        description: >
+          Name of the county where the city is located.
+
+      - name: continent_name
+        description: >
+          Name of the continent where the city is located.
+
+      - name: sales_territory_name
+        description: >
+          Name of the sales territory the city belongs to.
+
+      - name: region_name
+        description: >
+          Name of the region where the city is located.
+
+      - name: subregion_name
+        description: >
+          Name of the subregion where the city is located.
+
+      - name: lastest_recorded_population_number
+        description: >
+          The latest recorded population number for the city.
+
+      - name: valid_from
+        description: >
+          Timestamp indicating when the city record became valid (for Type 2 SCD).
+
+      - name: valid_to
+        description: >
+          Timestamp indicating when the city record ceased to be valid (for Type 2 SCD). Null for current records.
+
+      - name: extraction_date
+        description: >
+          Timestamp indicating when the data was extracted from the source system.
