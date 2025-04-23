@@ -52,6 +52,15 @@ jobs:
       - name: Generate catalog.json
         run: dbt docs generate
 
+      - name: Generate dbt docs
+        run: dbt docs generate
+
+      - name: Upload dbt target folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-target
+          path: target/
+
       - name: Run Pre-commit checks
         run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files
 
