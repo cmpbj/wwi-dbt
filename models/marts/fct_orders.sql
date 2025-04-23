@@ -33,7 +33,7 @@ with
             --o.extraction_date as order_extraction_date, -- Optional: Include if needed
 
             -- City Dimension Key from Cities table
-            , cities.city_pk as city_fk
+            , orders.city_fk
         -- Optional: Include city attributes directly if needed for performance/convenience
         -- c.city_name,
         -- c.state_province_name,
