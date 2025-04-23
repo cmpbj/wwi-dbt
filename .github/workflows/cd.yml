@@ -1,4 +1,4 @@
-name: CI_job
+name: CD_job
 
 on:
   push:
