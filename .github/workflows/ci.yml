@@ -49,6 +49,9 @@ jobs:
       - name: Parse dbt project
         run: dbt parse
 
+      - name: Build the project
+        run: dbt build --empty
+
       - name: Generate catalog.json
         run: dbt docs generate --profiles-dir . --target ci --no-partial-parse
 
