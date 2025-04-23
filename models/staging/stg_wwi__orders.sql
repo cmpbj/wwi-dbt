@@ -6,7 +6,7 @@ with
 
     , casting_columns as (
         select
-            cast("orderKey" as bigint) as order_key
+            cast("orderKey" as bigint) as order_pk
             , cast("cityKey" as int) as city_fk
             , cast("address" as varchar) as address_description
             , cast("customerKey" as int) as customer_fk
