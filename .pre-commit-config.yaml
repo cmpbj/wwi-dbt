@@ -6,7 +6,6 @@ repos:
     hooks:
     - id: dbt-deps
     - id: dbt-parse
-    - id: dbt-docs-generate
     - id: check-model-has-all-columns
       name: Ensure all models has all columns in the properties file.
       args: ["--catalog", "target/catalog.json"]
