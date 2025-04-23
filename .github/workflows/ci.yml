@@ -52,14 +52,6 @@ jobs:
       - name: Run Pre-commit checks
         run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files
 
-        env:
-          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
-          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
-          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
-          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
-          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
-          DBT_DEFAULT_TARGET: ci
-
   build:
     name: Build dbt Models
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
@@ -119,14 +111,6 @@ jobs:
           echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
           dbt run-operation drop_schemas_dev --args '{pattern: '"$CLEANED_BRANCH"'}'
 
-        env:
-          CI_HOSTNAME: ${{ secrets.CI_HOSTNAME  }}
-          CI_USER_NAME: ${{ secrets.CI_USER_NAME  }}
-          CI_PASSWORD: ${{ secrets.CI_PASSWORD  }}
-          CI_DB_NAME: ${{ secrets.CI_DB_NAME  }}
-          CI_SCHEMA: ${{ secrets.CI_SCHEMA  }}
-          DBT_DEFAULT_TARGET: ci
-
   upload_manifest:
     name: Upload Manifest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -136,7 +120,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensures full history is available
+          fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
 
       - name: Configure Git Authentication
@@ -187,10 +171,3 @@ jobs:
         with:
           github_token: ${{ secrets.GH_PAT }}
           force: true
-
-        env:
-          PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME  }}
-          PROD_USER_NAME: ${{ secrets.PROD_USER_NAME  }}
-          PROD_PASSWORD: ${{ secrets.PROD_PASSWORD  }}
-          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME  }}
-          PROD_SCHEMA: ${{ secrets.PROD_SCHEMA  }}

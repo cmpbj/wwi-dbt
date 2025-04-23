@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      Fact table containing order line item details, including customer, stock item, dates, quantities, pricing, and the associated city dimension key.
+    config:
+      meta:
+        table_owner: Freddy Krueger
+        team: Data Team
+        department: Analytics
+        model_maturity: high
+        access_type: restricted
+    columns:
+      - name: order_pk
+        description: >
+          Unique identifier for the order line item (Note: This might represent an order *line* PK if granular, or the overall order PK if aggregated. Adjust description if needed).
+        data_tests:
+          - not_null
+          - unique
+
+      - name: address_description
+        description: >
+          Description of the delivery address for the order.
+
+      - name: customer_fk
+        description: >
+          Foreign key referencing the customer associated with the order.
+        data_tests:
+          - not_null
+
+      - name: customer_name
+        description: >
+          Name of the customer who placed the order.
+
+      - name: stock_item_fk
+        description: >
+          Foreign key referencing the stock item ordered.
+        data_tests:
+          - not_null
+
+      - name: stock_item_description
+        description: >
+          Description of the stock item ordered.
+
+      - name: order_date
+        description: >
+          Date the order was placed.
+        data_tests:
+          - not_null
+
+      - name: picked_date
+        description: >
+          Date the order item was picked from inventory. Can be null if not yet picked.
+
+      - name: sales_person_fk
+        description: >
+          Foreign key referencing the sales person associated with the order.
+        data_tests:
+          - not_null
+
+      - name: picker_key_fk
+        description: >
+          Foreign key referencing the employee who picked the order item. Can be null if not yet picked.
+
+      - name: order_item_description
+        description: >
+          Specific description related to this order line item (if different from stock item description).
+
+      - name: package
+        description: >
+          Type of package used for the ordered item (e.g., Bag, Box).
+
+      - name: quantity
+        description: >
+          Number of units of the stock item ordered in this line item.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+      - name: unit_price
+        description: >
+          Price per unit of the stock item at the time of order.
+        data_tests:
+          - not_null
+
+      - name: tax_rate
+        description: >
+          Tax rate applied to this order line item.
+        data_tests:
+          - not_null
+
+      - name: total_excluding_tax
+        description: >
+          Total cost for this line item (quantity * unit_price) before tax.
+        data_tests:
+          - not_null
+
+      - name: tax_amount
+        description: >
+          Amount of tax calculated for this order line item.
+        data_tests:
+          - not_null
+
+      - name: total_including_tax
+        description: >
+          Total cost for this line item including tax.
+        data_tests:
+          - not_null
+
+      - name: city_fk
+        description: >
+          Foreign key referencing the city dimension, derived from the order's original city foreign key.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('cities')
+              field: city_pk

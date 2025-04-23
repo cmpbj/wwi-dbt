@@ -31,7 +31,7 @@ rules:
   empty-lines: enable
 
   # Forbid nodes with empty content (currently disabled)
-  empty-values: disable
+  empty-values: enable
 
   # Check spacing after hyphens -
   hyphens: enable

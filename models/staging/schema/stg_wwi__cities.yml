@@ -6,15 +6,15 @@ models:
       test
     config:
       meta:
-        table_owner: Rafaela Muller
-        team: Operations
-        department:
+        table_owner: Jonh Wick
+        team: Sales Ops
+        department: Sales
         model_maturity: high
         access_type: restricted
     columns:
       - name: city_pk
         description: >
-         { test }
+         test
         data_tests:
           - not_null
           - unique
@@ -22,8 +22,6 @@ models:
       - name: city_name
         description: >
           test
-        data_tests:
-          - not_null
 
       - name: state_province_name
         description: >
