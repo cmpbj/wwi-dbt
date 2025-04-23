@@ -23,8 +23,8 @@ env:
   DBT_DEFAULT_TARGET: ci
 
 jobs:
-  linting:
-    name: Linting
+  checks_before_build:
+    name: pre-build-checks
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
 
@@ -47,7 +47,7 @@ jobs:
         run: dbt debug
 
       - name: Compile dbt models
-        run: dbt compile
+        run: dbt parse
 
       - name: Generate catalog.json
         run: dbt docs generate --profiles-dir . --no-partial-parse
@@ -59,13 +59,13 @@ jobs:
           path: target/
 
       - name: Run Pre-commit checks
-        run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files
+        run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files pre-build
 
   build:
     name: Build dbt Models
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
-    needs: linting
+    needs: pre-build-checks
 
     steps:
       - name: Checkout Code
@@ -119,3 +119,42 @@ jobs:
         run: |
           echo "Attempting to drop schema: ${{ env.CI_SCHEMA }}"
           dbt run-operation drop_schemas_dev --args '{pattern: '"$CLEANED_BRANCH"'}'
+
+  checks_post_build:
+    name: pos-build-checks
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch history
+        run: git fetch origin main:refs/remotes/origin/main
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt dependencies
+        run: dbt deps
+
+      - name: Debug dbt connection
+        run: dbt debug
+
+      - name: Compile dbt models
+        run: dbt parse
+
+      - name: Generate catalog.json
+        run: dbt docs generate --profiles-dir . --no-partial-parse
+
+      - name: Upload dbt target folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-target
+          path: target/
+
+      - name: Run Pre-commit checks
+        run: pre-commit run --from-ref origin/main --to-ref HEAD --all-files pos-build
