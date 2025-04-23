@@ -65,7 +65,7 @@ jobs:
     name: Build dbt Models
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
-    needs: pre-build-checks
+    needs: checks_before_build
 
     steps:
       - name: Checkout Code
