@@ -100,7 +100,7 @@ jobs:
             echo "Manifest found, attempting state-based clone and build..."
             dbt clone -s state:modified+,config.materialized:incremental,state:old --exclude tag:pii --state target-defer
             dbt clone -s state:modified+,config.materialized:snapshot,state:old --exclude tag:pii --state target-defer
-            dbt build -s state:modified state:modified+ --state target-defer --defer --fail-fast $FULL_REFRESH
+            dbt build -s staging,@state:modified state:modified+ --state target-defer --defer --fail-fast $FULL_REFRESH
           else
             echo "Manifest not found, running standard build..."
             dbt build --fail-fast $FULL_REFRESH

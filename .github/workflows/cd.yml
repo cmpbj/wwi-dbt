@@ -49,7 +49,7 @@ jobs:
         run: dbt debug
 
       - name: dbt build
-        run: dbt build -s state:modified state:modified+ --state target-defer --defer --fail-fast
+        run: dbt build -s state:modified+ --state target-defer --defer --fail-fast
 
   upload_manifest:
     name: Upload Manifest
