@@ -31,10 +31,6 @@ models:
         description: >
           test
 
-      - name: photo
-        description: >
-          test
-
       - name: valid_from
         description: >
           test
