@@ -87,27 +87,31 @@ jobs:
         env:
           DBT_PROFILES_DIR: ./
 
-      - name: Prepare Manifest File
+      - name: Generate catalog.json
+        run: dbt-coves generate docs
+
+      - name: Prepare Artifacts Files
         run: |
           mkdir -p target-defer
           if [ -f target/manifest.json ]; then
             mv target/manifest.json target-defer/manifest.json
-            echo "Manifest prepared in target-defer/"
+            mv target/catalog.json target-defer/catalog.json
+            echo "Artifacts prepared in target-defer/"
           else
-            echo "manifest.json not found after dbt parse. Cannot proceed with upload."
+            echo "manifest.json or catalog.json not found after dbt parse/dbt docs generate. Cannot proceed with upload."
             exit 1
           fi
 
-      - name: Commit Manifest
+      - name: Commit Artifacts
         run: |
-          git add target-defer/manifest.json
+          git add target-defer/manifest.json target-defer/catalog.json
           if git diff --staged --quiet; then
-            echo "No changes to manifest.json to commit."
+            echo "No changes to commit."
           else
-            git commit -m "[skip ci] Upload manifest.json to branch main"
+            git commit -m "[skip ci] Upload artifacts to branch main"
           fi
 
-      - name: Push Manifest
+      - name: Push Artifacts
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_PAT }}
