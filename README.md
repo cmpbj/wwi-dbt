@@ -68,7 +68,7 @@ This setup helps to:
 * **`.pre-commit-config.yaml`:** Defines which hook repositories to use (dbt-checkpoint, sqlfluff, yamllint), which specific hooks to run, and any arguments/settings for those hooks (like test counts or naming patterns).
 * **`.sqlfluff`:** Contains all configuration rules for SQLFluff, including the SQL dialect, enabled/excluded rules, capitalization policies, indentation, line length, and alias rules.
 * **`.yamllint`:** Contains configuration rules for yamllint, controlling aspects like indentation, spacing, line length, and boolean usage in YAML files.
-* **`profiles.yml`:** (Not included in the repo for security, but required to run dbt). Defines the connections to the data warehouse for different environments (e.g., local, CI, prod). CI uses environment variables (`DBT_PROFILES_DIR` and secrets) to configure the connection.
+* **`profiles.yml`:** Defines the connections to the data warehouse for different environments (e.g., local, CI, prod). As it was defined in this repository, the profiles.yml uses enviroment variables to get the credentials. Often, we use a .env file (follow the example in example.env file). CI uses environment variables (`DBT_PROFILES_DIR` and secrets) to configure the connection.
 * **`requirements.txt`:** Lists the necessary Python dependencies, including `dbt-core`, the specific dbt adapter (`dbt-postgres`), `sqlfluff`, `yamllint`, `dbt-checkpoint`, etc.
 
 ## Getting Started (Locally)
