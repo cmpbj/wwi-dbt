@@ -7,7 +7,7 @@ repos:
     - id: dbt-deps
     - id: dbt-parse
     - id: check-model-has-all-columns
-      name: Ensure all models has all columns in the properties file.
+      name: Ensure all columns defined in the properties file exists in the database and vice versa.
       alias: pos-build
       args: ["--catalog", "target/catalog.json"]
     - id: check-model-columns-have-desc
