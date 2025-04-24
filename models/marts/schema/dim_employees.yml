@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: dim_employees
+    description: >
+      test
+    config:
+      meta:
+        table_owner: Jonh Wick
+        team: Sales Ops
+        department: Sales
+        model_maturity: high
+        access_type: restricted
+    columns:
+      - name: employee_pk
+        description: >
+         test
+        data_tests:
+          - not_null
+          - unique
+
+      - name: employee_name
+        description: >
+          test
+
+      - name: preferred_name
+        description: >
+          test
+
+      - name: is_sales_person
+        description: >
+          test
+
+      - name: photo
+        description: >
+          test
+
+      - name: valid_from
+        description: >
+          test
+
+      - name: valid_to
+        description: >
+          test
+
+      - name: extraction_date
+        description: >
+          test
