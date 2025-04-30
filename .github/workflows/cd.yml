@@ -128,7 +128,7 @@ jobs:
         run: |
           - apk add --no-cache python3 py3-pip
           - curl -L https://aka.ms/InstallAzureCli | bash
-          - az login --service-principal --username ${{ secrets.APP_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ TENANT_ID }}
+          - az login --service-principal --username ${{ secrets.APP_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
 
       - name: Login to Azure Container Registry
         run: |
