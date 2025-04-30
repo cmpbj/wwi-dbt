@@ -124,6 +124,9 @@ jobs:
     needs: upload_manifest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: install az CLI and authenticate
         run: |
           sudo apt-get update
