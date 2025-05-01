@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: wwi_sources
-    database: wwi_db
+    database: wwi_db_dl0n
     schema: raw
     tags: ['']
     description: >
